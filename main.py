@@ -6,8 +6,10 @@ import transformers
  
 # print(fastapi.__version__)
 
-classifier = transformers.pipeline("sentiment-analysis",
-                      model="distilbert-base-uncased-finetuned-sst-2-english")
+classifier = transformers.pipeline(
+    "sentiment-analysis",
+    model="distilbert-base-uncased-finetuned-sst-2-english"
+)
 app = FastAPI()
 
 app.add_middleware(
