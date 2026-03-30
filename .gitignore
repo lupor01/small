@@ -1,0 +1,10 @@
+# models
+.pkl
+.joblib
+
+# environment (and files)
+venv/
+env/
+.venv/
+.env
+*.env
