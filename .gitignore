@@ -2,9 +2,14 @@
 .pkl
 .joblib
 
+
 # environment (and files)
+smallenv/
 venv/
 env/
 .venv/
 .env
 *.env
+
+__pycache__/
+*.pyc
