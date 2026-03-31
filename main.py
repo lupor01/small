@@ -1,22 +1,13 @@
-from fastapi import FastAPI, Header, Depends, HTTPException
+from fastapi import FastAPI, Header, Depends, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 import transformers 
 
 
 app = FastAPI()
-
-
-# handling JS, CSS and HTML
-app.mount("/frontend", StaticFiles(directory="frontend"), name="frontend")
-html = Jinja2Templates(directory="frontend")
-
-@app.get("/")
-def home(request: Request):
-    return html.TemplateResponse("index.html", {"request": request})
 
 
 # escape localhost
@@ -28,6 +19,17 @@ app.add_middleware(
 )
 
 
+# handling JS, CSS and HTML
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
+
+
+# GET home
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse("index.html", context={"request": request})
+
+
 # nlp stuff
 classifier = transformers.pipeline(
     "sentiment-analysis",
@@ -37,7 +39,7 @@ class TextInput(BaseModel): # make sure it matches!!!
     text: str # INPUT VALIDATION
 
 
-# DON'T HARDCODE IN ACTUAL DEPLOYMENT!
+# KEY: DON'T HARDCODE IN ACTUAL DEPLOYMENT!
 API_KEY = "segretissimo"
 
 def verify_key(api_key: str = Header(...)):
@@ -45,6 +47,7 @@ def verify_key(api_key: str = Header(...)):
         raise HTTPException(status_code=401, detail="API key not valid")
     
 
+# model response
 @app.post("/sentiment")
 def analyse(data: TextInput, api_key: str = Depends(verify_key)) -> dict:
     result = classifier(data.text)[0] # predition here!!!

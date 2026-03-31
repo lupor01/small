@@ -1,8 +1,8 @@
-async function predict() {
+async function analyse() {
   const text = document.querySelector("input").value;
 
   try {
-    const response = await fetch("http://BACKEND/sentiment", {
+    const response = await fetch("/sentiment", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -14,7 +14,7 @@ async function predict() {
     const data = await response.json();
 
     document.getElementById("output").innerText =
-      "Sentiment: " + data.prediction;
+      `Sentiment: ${data.label} (certainty: ${data.score.toFixed(2)})`;
   } catch (error) {
     document.getElementById("output").innerText = "Error: " + error.message;
   }

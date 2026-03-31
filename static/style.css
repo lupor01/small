@@ -9,6 +9,10 @@ p {
   font-family: Arial;
 }
 
+.container {
+  text-align: center;
+}
+
 #output {
   text-align: center;
 }
