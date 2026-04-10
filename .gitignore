@@ -5,6 +5,7 @@
 
 # environment (and files)
 smallenv/
+small/
 venv/
 env/
 .venv/
