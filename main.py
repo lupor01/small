@@ -27,7 +27,7 @@ templates = Jinja2Templates(directory="templates")
 # GET home
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-    return templates.TemplateResponse("index.html", context={"request": request})
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 # nlp stuff
@@ -45,6 +45,7 @@ API_KEY = "segretissimo"
 def verify_key(api_key: str = Header(...)):
     if api_key != API_KEY:
         raise HTTPException(status_code=401, detail="API key not valid")
+    return True
     
 
 # model response
