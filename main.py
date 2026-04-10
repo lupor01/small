@@ -1,6 +1,8 @@
 from fastapi import FastAPI, Header, Depends, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from jinja2 import Environment, FileSystemLoader
 from fastapi.templating import Jinja2Templates
+
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
@@ -21,7 +23,18 @@ app.add_middleware(
 
 # handling JS, CSS and HTML
 app.mount("/static", StaticFiles(directory="static"), name="static")
+# env = Environment(
+#     loader=FileSystemLoader("templates"),
+#     cache_size=0  # 🔥 disables broken cache completely
+# )
+
+# templates = Jinja2Templates(env=env)
+# ????????????????????????????????????
 templates = Jinja2Templates(directory="templates")
+# ????????????????????????????????????
+# templates = Jinja2Templates(
+#     directory=os.path.join(os.path.dirname(__file__), "templates")
+# )
 
 
 # GET home
