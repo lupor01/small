@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, Header, Depends, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from jinja2 import Environment, FileSystemLoader
@@ -42,7 +43,7 @@ class TextInput(BaseModel): # make sure it matches!!!
 
 
 # KEY: DON'T HARDCODE IN ACTUAL DEPLOYMENT!
-API_KEY = "segretissimo"
+API_KEY = os.getenv("API_KEY")
 
 def verify_key(api_key: str = Header(...)):
     if api_key != API_KEY:
