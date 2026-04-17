@@ -1,4 +1,6 @@
 import os
+import sqlite3
+
 from fastapi import FastAPI, Header, Depends, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from jinja2 import Environment, FileSystemLoader
@@ -55,7 +57,13 @@ def verify_key(api_key: str = Header(...)):
 @app.post("/sentiment")
 def analyse(data: TextInput, api_key: str = Depends(verify_key)) -> dict:
     result = classifier(data.text)[0] # predition here!!!
+    label = result["label"]
+    score = float(result["score"])
+
+    with sqlite3.connect("small.db") as con:
+        con.execute("INSERT INTO Sentiment (Feedback, Score) VALUES (?, ?)", (data.text, score))
+
     return {
-        "label": result["label"],
-        "score": float(result["score"])
+        "label": label,
+        "score": score
     }

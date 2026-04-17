@@ -6,7 +6,7 @@ async function analyse() {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        "api-key": "segretissimo",
+        api_key: "segretissimo",
       },
       body: JSON.stringify({ text: text }),
     });
@@ -14,7 +14,7 @@ async function analyse() {
     const data = await response.json();
 
     document.getElementById("output").innerText =
-      `Sentiment: ${data.label} (certainty: ${data.score.toFixed(2)})`;
+      `Sentiment: ${data.label} | certainty: ${data.score.toFixed(2)}\nWe appreciate your help, user!`;
   } catch (error) {
     document.getElementById("output").innerText = "Error: " + error.message;
   }
