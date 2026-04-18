@@ -2,13 +2,13 @@
 
 Live demo: <URL>
 
-![screenshot](/static/screenshot.png)
-
 This project demonstrates end-to-end deployment of a transformer model in a web application.
 
 Users answer a simple question about what they think of the page, and the model performs real-time sentiment analysis on user feedback, providing a lightweight proxy for user experience.
 
 Survey-based methods have well-known limitations, but they provide a simple and cost-effective way to collect user data. This work is intended to simulate a plausible scenario for behaviour analysis, using NLP for quantitative insight.
+
+![screenshot](/static/screenshot.png)
 
 Focus:
 
