@@ -3,7 +3,6 @@ import sqlite3
 
 from fastapi import FastAPI, Header, Depends, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from jinja2 import Environment, FileSystemLoader
 from fastapi.templating import Jinja2Templates
 
 from fastapi.staticfiles import StaticFiles
@@ -14,13 +13,23 @@ import transformers
 
 app = FastAPI()
 
+with sqlite3.connect("small.db") as con:
+    con.execute("""
+        CREATE TABLE IF NOT EXISTS Sentiment (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Feedback TEXT,
+            Score REAL
+        )
+    """)
+
 
 # escape localhost
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
+    allow_credentials=True,
 )
 
 
@@ -46,24 +55,27 @@ class TextInput(BaseModel): # make sure it matches!!!
 
 # KEY: DON'T HARDCODE IN ACTUAL DEPLOYMENT!
 API_KEY = os.getenv("API_KEY")
+if API_KEY is None:
+    raise RuntimeError("API_KEY not defined in environment")
 
 def verify_key(api_key: str = Header(...)):
     if api_key != API_KEY:
         raise HTTPException(status_code=401, detail="API key not valid")
     return True
-    
+
 
 # model response
 @app.post("/sentiment")
 def analyse(data: TextInput, api_key: str = Depends(verify_key)) -> dict:
     result = classifier(data.text)[0] # predition here!!!
-    label = result["label"]
-    score = float(result["score"])
 
     with sqlite3.connect("small.db") as con:
-        con.execute("INSERT INTO Sentiment (Feedback, Score) VALUES (?, ?)", (data.text, score))
+        con.execute(
+            "INSERT INTO Sentiment (Feedback, Score) VALUES (?, ?);",
+            (data.text, float(result["score"]))
+        )
 
     return {
-        "label": label,
-        "score": score
+        "label": result["label"],
+        "score": float(result["score"])
     }
