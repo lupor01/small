@@ -1,6 +1,6 @@
 ## Real-time sentiment analysis of user feedback
 
-Live demo: <URL>
+Live demo: <https://small-hxyp.onrender.com>
 
 This project demonstrates end-to-end deployment of a transformer model in a web application.
 
