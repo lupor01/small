@@ -1,7 +1,6 @@
 ## Real-time sentiment analysis of user feedback
 
-Live demo: <https://small-bzsn.onrender.com>
-⚠️ The app backend runs on a 512MB RAM. It may require up to a minute to load.
+Live demo: <https://small-bzsn.onrender.com> (⚠️The app backend was deployed using Render's free tier, running on 512MB of RAM - it is slow)
 
 This project demonstrates end-to-end deployment of a transformer model in a web application.
 
